@@ -31,6 +31,7 @@ function App() {
         }}
       ></input>
       <button onClick={joinRoom}>Join</button>
+      <Chat socket={socket} username={username} room={room}/>
     </div>
   );
 }
