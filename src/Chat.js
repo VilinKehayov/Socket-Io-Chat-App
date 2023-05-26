@@ -3,13 +3,15 @@ import React, { useState } from "react";
 const Chat = ({ socket, username, room }) => {
   const [currentMessage, setCurrentMessage] = useState("");
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
         room: room,
         author: username,
-        time: new Date(Date.now()).getHours(),
+        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
       };
+
+      await socket.emit("send_message", messageData);
     }
   };
   return (
@@ -26,7 +28,7 @@ const Chat = ({ socket, username, room }) => {
           setCurrentMessage(event.target.value);
         }}
       ></input>
-      <button>&#9658;</button>
+      <button onClick={sendMessage}>&#9658;</button>
     </div>
   );
 };
