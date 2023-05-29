@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Chat = ({ socket, username, room }) => {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -8,14 +8,24 @@ const Chat = ({ socket, username, room }) => {
       const messageData = {
         room: room,
         author: username,
-        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+        message: currentMessage,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
       };
 
       await socket.emit("send_message", messageData);
     }
   };
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      console.log(data);
+    });
+  }, [socket]);
   return (
-    <div>
+    <div className="chat-window">
       <div className="chat-header">
         <p>Live Chat</p>
       </div>
